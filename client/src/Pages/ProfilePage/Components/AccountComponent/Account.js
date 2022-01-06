@@ -1,29 +1,36 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import style from "./Account.module.scss";
 import { useSelector } from 'react-redux';
 import axios from "axios";
+import { useForm } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 
 function Account() {
 
+  const { register, handleSubmit, watch, formState: {errors} } = useForm();
   const [loading, setLoading] = useState(false);
-
   const user = useSelector(state => state.user.user);
-  
-  const FullName = useRef(null);
-  const Email = useRef(null);
-  const Username = useRef(null);
-  const Password = useRef(null);
 
   const submit = async () => {
-    setLoading(true)
+    setLoading(false);
+    const FullName = watch("fullName");
+    const Username = watch("username");
+    const Email = watch("email");
+    const Password = watch("password");
+    console.log(FullName);
+    console.log(Username);
+    console.log(Email);
+    console.log(Password);
+
     axios.put(`http://localhost:4000/users/${user.user_id}/updateProfile`, {
-      fullName: FullName.current.value,
-      email: Email.current.value,
-      username: Username.current.value,
-      password: Password.current.value,
+      fullName: FullName,
+      email: Email,
+      username: Username,
+      password: Password,
     }, { withCredentials: true })
     .then((res) => {
-      setLoading(false);
+      setLoading(true);
+      // setLoading(false);
       console.log(res);
       alert('Successfully updated!');
       window.location.reload();
@@ -34,6 +41,24 @@ function Account() {
       console.log(err);
     });
   }
+
+  // const checked = (e) => {
+  //   console.log('this is e: ', e);
+
+  //   if (!e.target.nextSibling.value) {
+  //     console.log('insert input values');
+  //     if (e.target.nextSibling.id === 'fullName') {
+  //       e.target.nextSibling.value = user.fullname;
+  //       setFullName(user.fullName);
+  //     }
+  //     else if (e.target.nextSibling.id === 'username') e.target.nextSibling.value = user.username;
+  //     else if (e.target.nextSibling.id === 'email') e.target.nextSibling.value = user.email;
+  //   }
+  //   else {
+  //     console.log('delete input values');
+  //     e.target.nextSibling.value = ''
+  //   }
+  // }
 
   return (
     <div className={style.main}>
@@ -56,29 +81,29 @@ function Account() {
             <div className={style.loader}></div>
           </div>
         :
-
-          <form className={style.content}>
+          <form autoComplete="off" onSubmit={handleSubmit(submit)} className={style.content}>
               <label htmlFor="">Full Name</label>
-              <br />
-              <input ref={FullName} type="text" placeholder="Enter your new Full Name" />
-              <br /><br />
+              
+              <input style={errors.fullName ? {border: '1px solid #d47c7c'} : {border: '1px solid transparent'}} {...register('fullName', { required: "Full name is required" })} type="text" id='fullName' placeholder="Enter your new name"/>
+              { errors.fullName ? <ErrorMessage errors={errors} name='fullName' render={({ message }) => <span>{message}<br/></span>}/> : <><br/><br/></>}
 
               <label htmlFor="">Username</label>
-              <br />
-              <input ref={Username} type="text" placeholder="Enter your new Username" />
-              <br /><br />
+              
+              <input style={errors.username ? {border: '1px solid #d47c7c'} : {border: '1px solid transparent'}} {...register('username', { required: true, minLength: 6, maxLength: 20 })} type="text" id='username' placeholder="Enter your new username" />
+              { errors.username && errors.username.type === 'required' ? <span>Username is required<br/></span> : errors.username && errors.username.type === 'minLength' ? <span>Username should be at least 6 characters<br/></span> : errors.username && errors.username.type === 'maxLength' ? <span>Username should be at most 20 characters<br/></span> : <><br/><br/></> }
 
               <label htmlFor="">Email</label>
-              <br />
-              <input ref={Email} type="text" placeholder="Enter your new Email..." />
-              <br /><br />
+             
+              <input style={errors.email ? {border: '1px solid #d47c7c'} : {border: '1px solid transparent'}} {...register('email', { required: true, pattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ })} type="text" id='email' placeholder="Enter your new email" />
+              { errors.email && errors.email.type === 'required' ? <span>Email is required<br/></span> : errors.email && errors.email.type === 'pattern' ? <span>Please enter a valid email address<br/></span> : <><br/><br/></>}
 
               <label htmlFor="">Password</label>
               <br />
-              <input ref={Password} type="text" placeholder="Enter your new Password..." />
+              <input style={errors.password ? {border: '1px solid #d47c7c'} : {border: '1px solid transparent'}} {...register('password', { required: true, minLength: 6 })} type="password" placeholder="Enter your new password" />
+              { errors.password && errors.password.type === 'required' ? <span>Please confirm  your password<br/></span> : errors.password && errors.password.type === 'minLength' ? <span>Password should be at least 6 characters<br/></span> : <><br/><br/></> }
 
-              <br /><br /><br />
-              <button onClick={submit}>Submit Changes</button>
+              <br />
+              <input type='submit' value='Submit Changes' className={style.btn}></input>
           </form>
 
         }
