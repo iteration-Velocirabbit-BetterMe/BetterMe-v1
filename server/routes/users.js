@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db-models/db-models.js");
 const appControllers = require("../controller/controller.js");
+const bcrypt = require('bcrypt');
+const SALT_WORK_FACTOR = 10;
 
 router.get('/logout', (req, res) => {
   res.clearCookie('user');
@@ -39,13 +41,14 @@ router.post("/login", appControllers.login, appControllers.checkPassword, (req, 
 
 router.put("/:id/updateProfile", async (req, res) => {
   const { id } = req.params;
-  const { fullName, username, password, email } = req.body;
+  const bcryptPassword = await bcrypt.hash(req.body.password, SALT_WORK_FACTOR)
+  const { fullName, username, email } = req.body;
 
   const q =
     "UPDATE users SET username =($1), password=($2), email=($3), fullName=($4) WHERE user_id=($5)";
   await db.query(
     q,
-    [username, password, email, fullName, id],
+    [username, bcryptPassword, email, fullName, id],
     (err, result) => {
       if (err) {
         return res.status(400).send("Error updating userAccountDetails");
