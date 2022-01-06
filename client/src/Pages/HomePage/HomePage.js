@@ -101,7 +101,7 @@ function HomePage() {
                             <div className={style.teamCol2}>
                                 <a href="https://www.linkedin.com/in/evan-preedy-05b908140/" rel="noreferrer" target="_blank"><h1>Evan Preedy</h1></a>
                                 <a href="https://www.linkedin.com/in/sercan-tuna-29b45b65/" rel="noreferrer" target="_blank"><h1>Sercan Tuna</h1></a>
-                                <a href="https://www.linkedin.com/" rel="noreferrer" target="_blank"><h1>David Lopez</h1></a>
+                                <a href="www.linkedin.com/in/david-michael-lopez/" rel="noreferrer" target="_blank"><h1>David Lopez</h1></a>
                                 <a href="https://www.linkedin.com/" rel="noreferrer" target="_blank"><h1>Tom Pryor</h1></a>
                             </div>
                         </div>

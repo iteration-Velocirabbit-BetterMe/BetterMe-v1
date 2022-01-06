@@ -47,7 +47,7 @@ function LoginPage() {
 
     return (
         <>
-            <Nav />
+            <Nav transition={true} />
             <div style={{backgroundImage: `url(${avo})`}} className={style.main}>
                 {loading ?
                     <div className={style.loader}></div>
@@ -61,16 +61,13 @@ function LoginPage() {
                                 <label>Username or Email</label>
                                 <br />
                                 <input style={errors.username ? {border: '1px solid #d47c7c'} : {border: '1px solid transparent'}} {...register('username', { required: 'Username or email is required' })} id="name" type="text" placeholder='Enter Your Name...' />
-                                <ErrorMessage errors={errors} name='username' render={({ message }) => <span>{message}</span>} />
-
-                                <br /><br />
+                                { errors.username ? <ErrorMessage errors={errors} name='username' render={({ message }) => <span>{message}<br/></span>} /> : <><br /><br /></> }
 
                                 <label>Password</label>
                                 <br />
                                 <input style={errors.password ? {border: '1px solid #d47c7c'} : {border: '1px solid transparent'}} {...register('password', { required: 'Password is required' })} id='password' type="password" placeholder='Enter Your Password...' />
-                                <ErrorMessage errors={errors} name='password' render={({ message }) => <span>{message}</span>} />
+                                { errors.password ? <ErrorMessage errors={errors} name='password' render={({ message }) => <span>{message}<br/></span>}/> : <><br /><br /></>}
 
-                                <br /><br />
                                 { errors.invalid && errors.invalid.type === 'server' && <span>{errors.invalid.message}</span> }
                                 <br />
                                 <input {...register('invalid')} type='submit' value="Login" className={style.btn}/>

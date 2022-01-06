@@ -25,14 +25,15 @@ router.post("/signup", appControllers.signup, (req, res) => {
   }
 });
 
-router.post("/login", appControllers.login, (req, res) => {
-  if (res.locals.error) {
-    console.log(res.locals.error);
-    res.status(400).json({ error: res.locals.error });
-  }
-  if (res.locals.message) {
+router.post("/login", appControllers.login, appControllers.checkPassword, (req, res) => {
+  if (res.locals.clearance) {
+    
     console.log(res.locals.message);
     res.status(200).json({ message: res.locals.message });
+  }
+  else {
+    console.log(res.locals.error);
+    res.status(400).json({ error: res.locals.error });
   }
 });
 

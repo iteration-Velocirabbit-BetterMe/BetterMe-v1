@@ -10,23 +10,26 @@ $pewter-blue: #8baaadff;
 
 .main {
     width: 100%;
+    max-height: 100vh;
     height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; // start at the bottom of the page
+    justify-content: flex-end;
     align-items: center;
     // background-color:#5d737eff;
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: left top
+    background-position: left top;
 }
 
 .container {
-    width: 60%;
-    height: auto; 
+    width: 50%;
     background-color: white;
-    max-height: 95%; // adjust the max-height so when new spans show up, wont push some content out of view
+    height: 87.5%;
+    margin-bottom: 1rem;
     overflow: hidden; // disable scrolling    
+    box-shadow: 2px 2px 7px 0px rgb(17, 17, 17, 0.5);
+    border-radius: 20px;
 }
 
 .content {
