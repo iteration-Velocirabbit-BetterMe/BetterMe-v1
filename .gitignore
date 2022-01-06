@@ -6,3 +6,4 @@ client/src/Pages/SearchItemPage/sample.json
 client/src/Pages/SearchItemPage/sample2.json
 client/src/Pages/SearchItemPage/SearchItemPage.js
 client/src/Pages/SearchItemPage/SearchItemPage.module.scss
+build/*

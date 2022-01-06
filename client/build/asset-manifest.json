@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/static/css/main.2a51f5c8.css",
+    "main.js": "/static/js/main.464145be.js",
+    "static/media/boringGreenFood.jpeg": "/static/media/boringGreenFood.b74b4b00eed394bd2ad7.jpeg",
+    "static/media/foodAsort.jpg": "/static/media/foodAsort.17d97233ff90425cf5b9.jpg",
+    "static/media/pitch.jpg": "/static/media/pitch.fd688e7a19b2dfcdb460.jpg",
+    "static/media/mongo.jpg": "/static/media/mongo.ad7f616ae0c6b16bd947.jpg",
+    "static/media/yoga.jpg": "/static/media/yoga.971f3b6a31bbb9f80944.jpg",
+    "static/media/Berrys.jpg": "/static/media/Berrys.c1cd423fe13687d681cf.jpg",
+    "static/media/lifecycle.jpg": "/static/media/lifecycle.a8677ef41cfcefc15224.jpg",
+    "static/media/rezel.jpg": "/static/media/rezel.5ce301f1365e9f2a09cb.jpg",
+    "static/media/avo.jpg": "/static/media/avo.93da6157c1bf4d3bb7ce.jpg",
+    "static/media/placeHolder.png": "/static/media/placeHolder.65f9347f9da59256b8cb.png",
+    "static/media/thumbsUp.png": "/static/media/thumbsUp.7e05cd9ac0812696b5ef.png",
+    "index.html": "/index.html",
+    "main.2a51f5c8.css.map": "/static/css/main.2a51f5c8.css.map",
+    "main.464145be.js.map": "/static/js/main.464145be.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2a51f5c8.css",
+    "static/js/main.464145be.js"
+  ]
+}
