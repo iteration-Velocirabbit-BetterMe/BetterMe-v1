@@ -1,23 +1,28 @@
 const db = require("../db-models/db-models");
+const bcrypt = require('bcrypt');
 
 const appControllers = {};
-
+const SALT_WORK_FACTOR = 10;
 //CONTROLLERS HERE
 
 appControllers.login = async (req, res, next) => {
-  const { username, password } = req.body;
+  const { username } = req.body;
   console.log("this is username from controllers:", username);
-  const q = "SELECT * FROM users WHERE username=($1) AND password=($2)";
-  await db.query(q, [username, password], (err, data) => {
+  const q = "SELECT * FROM users WHERE username=($1)";
+  await db.query(q, [username], (err, data) => {
     if (err) {
       return next(err);
     }
     if (data.rows.length > 0) {
-      console.log("user exist");
+      console.log("Found user, attempting to login with credentials: ");
       res.cookie("user", JSON.stringify(data.rows[0]), {
         maxAge: 900000,
         httpOnly: false,
       });
+      console.log('found username: ', username)
+      const password = data.rows[0].password;
+      console.log('found password: ', password)
+      res.locals.foundPassword = password;
       res.locals.message = "successfully logged in";
       return next();
     } else {
@@ -27,8 +32,17 @@ appControllers.login = async (req, res, next) => {
   });
 };
 
+appControllers.checkPassword = async (req, res, next) => {
+  bcrypt.compare(req.body.password, res.locals.foundPassword, (err, data) => {
+    if (data) res.locals.clearance = true;
+    else res.locals.clearance = false;
+    return next();
+  });
+}
+
 appControllers.signup = async (req, res, next) => {
-  const { fullName, username, password, email } = req.body;
+  res.locals.password = await bcrypt.hash(req.body.password, SALT_WORK_FACTOR)
+  const { fullName, username, email } = req.body;
   console.log("here is the username: ", username);
   console.log("type of username: ", typeof username);
   console.log('this is the req body', req.body)
@@ -51,9 +65,9 @@ appControllers.signup = async (req, res, next) => {
     validationErrors.fullName = "Please enter your full name.";
   }
   // if password is empty/less than x characters
-  if (password.length === 0) {
+  if (req.body.password.length === 0) {
     validationErrors.password = "Please enter your password.";
-  } else if (password.length < 6) {
+  } else if (req.body.password.length < 6) {
     validationErrors.password = "Password must be min 6 characters";
   }
 
@@ -90,12 +104,14 @@ appControllers.signup = async (req, res, next) => {
     } else {
       await db.query(
         "INSERT INTO users (username, fullName, password, email) VALUES (($1), ($2), ($3), ($4))",
-        [username, fullName, password, email],
+        [username, fullName, res.locals.password, email],
         async (err, data) => {
           if (err) {
             return next(err);
           }
           console.log("hey i inserted the user");
+          console.log(`username: ${username}`)
+          console.log(`bcrypted and hashed password: ${res.locals.password}`)
 
           await db.query(
             "SELECT * FROM users WHERE username=($1)",
